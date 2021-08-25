@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <h1>Pagamento Online</h1>
     <Card msg="Teste" />
   </div>
 </template>
