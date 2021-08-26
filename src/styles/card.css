@@ -110,4 +110,16 @@ input:focus, select:focus {
   border: 1px solid #FFC226;
   outline: none;
 }
+
+@media (max-width: 540px) {
+  .card {
+    width: 90%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .card {
+    width: 80%;
+  }
+}
 /*# sourceMappingURL=card.css.map */

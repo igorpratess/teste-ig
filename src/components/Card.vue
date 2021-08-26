@@ -78,7 +78,7 @@
         <h2>Pagamento</h2>
         <div class="d-flex">
           <div class="col-6">
-            <form action="http://localhost:8080/" method="POST" data-mundicheckout-form class="form">
+            <form action=" https://app.institutogourmet.com/" method="POST" data-mundicheckout-form class="form">
               <label for="card-name" class="sub">Nome no cartão</label>
               <input id="card-name" type="text" name="holder-name" data-mundicheckout-input="holder_name" v-on:input="valueFields.cardName = $event.target.value" data-card-field>
               <label for="card-number" class="sub">Número do cartão</label>
