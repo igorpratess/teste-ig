@@ -8,20 +8,24 @@
           <div class="col-6">
             <h6 class="sub">Contratante</h6>
             <h5 class="info" v-if="user.client">{{user.client.name}}</h5>
+            <h5 class="info" v-else>Nenhum contratante achado</h5>
           </div>
           <div class="col-6">
             <h6 class="sub">Documento(CPF)</h6>
-            <h5 class="info">{{cpf}}</h5>
+            <h5 class="info" v-if="cpf">{{cpf}}</h5>
+            <h5 class="info" v-else>Nenhum contratante achado</h5>
           </div>
         </div>
         <div class="d-flex">
           <div class="col-6">
             <h6 class="sub">Endereço</h6>
-            <h5 class="info" v-if="user.client">{{user.client.address.street}}, {{user.client.address.number}}</h5>
+            <h5 class="info" v-if="user.client">{{user.client.address.street || ''}}, {{user.client.address.number}}</h5>
+            <h5 class="info" v-else>Nenhum contratante achado</h5>
           </div>
           <div class="col-6">
             <h6 class="sub">Bairro</h6>
             <h5 class="info" v-if="user.client">{{user.client.address.neighborhood}}</h5>
+            <h5 class="info" v-else>Nenhum contratante achado</h5>
           </div>
         </div>
       </div>
@@ -31,11 +35,13 @@
         <div class="d-flex">
           <div class="col-6">
             <h6 class="sub">Curso sendo contratado</h6>
-            <h5 class="info">{{course}}</h5>
+            <h5 class="info" v-if="course">{{course}}</h5>
+            <h5 class="info" v-else>Nenhum curso achado</h5>
           </div>
           <div class="col-6">
             <h6 class="sub">Dia e horário</h6>
-            <h5 class="info">{{date}}</h5>
+            <h5 class="info" v-if="date">{{date}}</h5>
+            <h5 class="info" v-else>Nenhum curso achado</h5>
           </div>
         </div>
       </div>
@@ -47,19 +53,23 @@
         <div class="d-flex">
           <div class="col-3">
             <h6 class="sub">Valor das parcelas</h6>
-            <h5 class="info">{{valueInstallment}}</h5>
+            <h5 class="info" v-if="valueInstallment">{{valueInstallment}}</h5>
+            <h5 class="info" v-else>R$0</h5>
           </div>
           <div class="col-3">
             <h6 class="sub">Quantidade de parcelas</h6>
             <h5 class="info" v-if="user.financial">{{user.financial.installments.quantity}}</h5>
+            <h5 class="info" v-else>0</h5>
           </div>
           <div class="col-3">
             <h6 class="sub">Forma de pagamento</h6>
             <h5 class="info" v-if="user.financial">{{user.financial.payment_method}}</h5>
+            <h5 class="info" v-else>Nenhum curso achado</h5>
           </div>
           <div class="col-3">
             <h6 class="sub">Início da cobrança</h6>
-            <h5 class="info" >{{billingAt}}</h5>
+            <h5 class="info" v-if="billingAt">{{billingAt}}</h5>
+            <h5 class="info" v-else>Nenhum curso achado</h5>
           </div>
         </div>
       </div>
@@ -116,13 +126,14 @@
                 </div>
               </div>
               <!-- <input type="text" name="buyer-name"> -->
+              <button type="submit">Realizar Pagamento</button>
             </form>
           </div>
           <div class="col-6">
             <PayCard :value-fields="valueFields" :input-fields="inputFields"/>
           </div>
         </div>
-        <button type="submit">Realizar Pagamento</button>
+        
       </div>
     </div>
 
@@ -184,6 +195,9 @@ export default {
       this.transformValueInstallments()
     },
     transformCpf: function () {
+
+      if(!this.user.client) return
+
       const array = []
 
       for (let i = 0; i < this.user.client.document_cpf.length; i++) {
@@ -202,9 +216,12 @@ export default {
       this.cpf = array.join('')
     },
     transformCourse: function () {
+      if(!this.user.course) return
       this.course = this.user.course.name.split(' ')[0] + ' ' + this.user.course.name.split(' ')[1]
     },
     transformDate: function () {
+
+      if(!this.user.course) return
       const date = new Date(this.user.course.start_at)
       const weekday = date.getDay()
 
@@ -235,10 +252,12 @@ export default {
       }
     },
     transformBillingAt: function () {
+      if(!this.user.financial) return
       const billingAt = new Date(this.user.financial.start_billing_at)
       this.billingAt = billingAt.toLocaleDateString('pt-BR')
     },
     transformValueInstallments: function () {
+      if(!this.user.financial) return
       this.valueInstallment = this.user.financial.installments.value.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'})
     }
   },
